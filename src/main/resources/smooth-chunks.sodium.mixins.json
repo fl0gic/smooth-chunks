@@ -5,9 +5,8 @@
   "compatibilityLevel": "JAVA_8",
   "plugin": "cc.flogi.dev.smoothchunks.mixin.SmoothChunksMixinPlugin",
   "mixins": [
-    "vanilla.BuiltChunkTaskMixin",
-    "vanilla.ChunkBuilderMixin",
-    "vanilla.WorldRendererMixin"
+    "sodium.ChunkRenderManagerMixin",
+    "sodium.SodiumChunkBuilderMixin"
   ],
   "injectors": {
     "defaultRequire": 1

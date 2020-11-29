@@ -1,12 +1,24 @@
 plugins {
     id 'fabric-loom' version '0.5-SNAPSHOT'
     id 'io.freefair.lombok' version '5.2.1'
+    id 'com.matthewprenger.cursegradle' version '1.4.0'
     id 'maven-publish'
 }
+
+repositories {
+    maven { url = 'https://jitpack.io' }
+}
+
+sourceCompatibility = JavaVersion.VERSION_1_8
+targetCompatibility = JavaVersion.VERSION_1_8
 
 archivesBaseName = project.archives_base_name
 version = project.mod_version as Object
 group = project.maven_group as Object
+
+def build_release = System.getenv("BUILD_RELEASE") == "true"
+if (!build_release)
+    version += "-SNAPSHOT"
 
 dependencies {
     //to change the versions see the gradle.properties file
@@ -41,7 +53,25 @@ dependencies {
     include("me.shedaniel.cloth:config-2:${project.cloth_version}")
     include("me.sargunvohra.mcmods:autoconfig1u:${project.autoconfig_version}")
 
+    // ModMenu
     modImplementation("io.github.prospector:modmenu:${project.modmenu_version}")
+
+    // Sodium
+    modCompileOnly "com.github.jellysquid3:sodium-fabric:${project.sodium_version}"
+    modRuntime "com.github.jellysquid3:sodium-fabric:${project.sodium_version}"
+}
+
+// Returns true if running from GitHub Actions.
+if (System.getenv("CI") == "true") {
+    curseforge {
+        apiKey = System.getenv("CURSEFORGE_TOKEN")
+        project {
+            id = "415285"
+            changelog = "Learn more about this release at https://github.com/fl0gic/smooth-chunks/releases"
+            releaseType = System.getenv("BUILD_RELEASE") == "true" ? "release" : "beta"
+        }
+    }
+    //TODO add modrinth support (or preferably just get this out of here and into github actions)
 }
 
 minecraft {
@@ -76,6 +106,3 @@ task sourcesJar(type: Jar, dependsOn: classes) {
 jar {
     from "LICENSE"
 }
-
-// configure the maven publication
-//publishing {}

@@ -1,4 +1,4 @@
-package cc.flogi.dev.smoothchunks.mixin;
+package cc.flogi.dev.smoothchunks.mixin.vanilla;
 
 import cc.flogi.dev.smoothchunks.handler.ChunkAnimationHandler;
 import it.unimi.dsi.fastutil.objects.ObjectListIterator;
@@ -8,6 +8,7 @@ import net.minecraft.client.render.WorldRenderer;
 import net.minecraft.client.render.chunk.ChunkBuilder;
 import net.minecraft.client.util.math.MatrixStack;
 import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
@@ -30,6 +31,6 @@ public abstract class WorldRendererMixin {
     private void renderLayerInject(RenderLayer renderLayer, MatrixStack matrixStack, double d, double e, double f,
                                    CallbackInfo ci, boolean bl, ObjectListIterator objectListIterator,
                                    WorldRenderer.ChunkInfo chunkInfo2, ChunkBuilder.BuiltChunk builtChunk, VertexBuffer vertexBuffer) {
-        ChunkAnimationHandler.get().updateChunk(builtChunk, matrixStack);
+        ChunkAnimationHandler.get().updateChunk(builtChunk.getOrigin(), matrixStack);
     }
 }
