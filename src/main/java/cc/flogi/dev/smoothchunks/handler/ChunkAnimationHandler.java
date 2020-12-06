@@ -4,7 +4,7 @@ import cc.flogi.dev.smoothchunks.SmoothChunks;
 import cc.flogi.dev.smoothchunks.config.LoadAnimation;
 import cc.flogi.dev.smoothchunks.config.SmoothChunksConfig;
 import cc.flogi.dev.smoothchunks.util.UtilEasing;
-import it.unimi.dsi.fastutil.objects.Reference2ReferenceOpenHashMap;
+import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import net.minecraft.client.MinecraftClient;
@@ -20,7 +20,7 @@ import net.minecraft.util.math.Vec3i;
  */
 public final class ChunkAnimationHandler {
     private static final ChunkAnimationHandler instance = new ChunkAnimationHandler();
-    private final Reference2ReferenceOpenHashMap<Vec3i, AnimationController> animations = new Reference2ReferenceOpenHashMap<>();
+    private final Object2ObjectOpenHashMap<Vec3i, AnimationController> animations = new Object2ObjectOpenHashMap<>();
 
     public static ChunkAnimationHandler get() {
         return instance;
@@ -29,7 +29,7 @@ public final class ChunkAnimationHandler {
     /**
      * Adds a chunk to the animation handler, the chunk will be animated over the next few frames.
      *
-     * @param chunk The BuiltChunk to animate.
+     * @param position The position of the chunk to animate.
      */
     public void addChunk(BlockPos position) {
         if (animations.containsKey(position)) return;
@@ -59,9 +59,9 @@ public final class ChunkAnimationHandler {
      * Called for each chunk every frame, updates the animation progress of the given chunk.
      *
      * @param chunkPos The position of the chunk to be updated.
-     * @param stack The stack to have translations & scale calls pushed onto it.
+     * @param stack    The stack to have translations & scale calls pushed onto it.
      */
-    public void updateChunk(BlockPos chunkPos, MatrixStack stack) {
+    public void updateChunk(Vec3i chunkPos, MatrixStack stack) {
         SmoothChunksConfig config = SmoothChunks.get().getConfig();
 
         AnimationController controller = animations.get(chunkPos);
@@ -97,6 +97,11 @@ public final class ChunkAnimationHandler {
         }
 
         if (completion >= 1.0) animations.remove(chunkPos);
+    }
+
+    //TODO consider calling this on F3+A or any world reloads to quickly empty the animations map.
+    public void clearAnimations() {
+        animations.clear();
     }
 
     @AllArgsConstructor @Data
