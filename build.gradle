@@ -62,17 +62,17 @@ dependencies {
 }
 
 // Returns true if running from GitHub Actions.
-if (System.getenv("CI") == "true") {
-    curseforge {
-        apiKey = System.getenv("CURSEFORGE_TOKEN")
-        project {
-            id = "415285"
-            changelog = "Learn more about this release at https://github.com/fl0gic/smooth-chunks/releases"
-            releaseType = System.getenv("BUILD_RELEASE") == "true" ? "release" : "beta"
-        }
-    }
-    //TODO add modrinth support (or preferably just get this out of here and into github actions)
-}
+//if (System.getenv("CI") == "true" && System.getenv("BUILD_RELEASE") == "true") {
+//    curseforge {
+//        apiKey = System.getenv("CURSEFORGE_TOKEN")
+//        project {
+//            id = "415285"
+//            changelog = "Learn more about this release at https://github.com/fl0gic/smooth-chunks/releases"
+//            releaseType = "release"
+//        }
+//    }
+//    //TODO add modrinth support (or preferably just get this out of here and into github actions)
+//}
 
 minecraft {
     accessWidener "src/main/resources/$archivesBaseName" + ".accesswidener"
